@@ -1,5 +1,5 @@
 # LiveData
-### Observer
+## 1. Observer
  ```Kotlin
 class MainActivity : AppCompatActivity() {
  
@@ -64,7 +64,7 @@ LiveData라는 데이터 홀더 클래스가 가지고 있는 데이터만 감�
 
 이어서 LiveData에 대해 알아보자.
 
-### LiveData
+## 2. LiveData
  ```Kotlin
 var height = 183
 ```
@@ -136,7 +136,7 @@ LiveData는 값의 수정이 불가능하다.
 
 **UI 컨트롤러(액티비티, 프래그먼트)가 값을 직접 수정하지 못하게 하기 위함이다.**
 
-### LiveData의 장점
+## 3. LiveData의 장점
 
 + 데이터와 UI 상태 일치 보장
   + LiveData는 데이터가 변경될 때마다 Observer 객체에게 알려주고, Observer는 알림을 받을 때마다 대신 UI를 업데이트하므로 데이터와 UI 상태 일치를 보장한다.
