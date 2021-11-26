@@ -153,4 +153,52 @@ LiveData는 값의 수정이 불가능하다.
 + 리소스 공유
   + LiveData 객체가 시스템 서비스에 한 번 연결되면 LiveData가 필요한 모든 곳에서(모든 Observer가) LiveData 객체를 관찰할 수 있다.
 
+## 4. 더 알아보기
+### LifeCycleOwner
 
+위에서 설명했듯이 Observer는 UI 컨트롤러의 생명주기를 따른다.
+
+Observer가 어떤 액티비티 혹은 어떤 프래그먼트의 수명주기를 따를지 정해주어야 한다.
+
+액티비티 같은 경우는 this 키워드를 이용해 현재 액티비티를 지정해주면 되는데
+
+**프래그먼트 같은 경우**는 this를 사용하면 안 된다.
+
+그 [이유](https://pluu.github.io/blog/android/2020/01/25/android-fragment-lifecycle/)에 대해서 잘 정리해놓은 블로그가 있어서 꼭 한 번씩 읽어보길 추천한다. 👍
+
+3줄 요약해보자면
+
+1. 기존의 프래그먼트 생명주기를 사용하면 복수의 Observer가 호출될 가능성이 있다.
+
+2. 구글이 실수한 부분이고, 이를 개선하기 위해 새로운 프래그먼트 생명주기가 도입되었다.
+
+3. this 대신에 **viewLifecycleOwner**를 사용하면 된다.
+
+### observeForever
+위에서 언급한 것처럼 Observer는 UI 컨트롤러의 생명주기를 따른다.
+
+액티비티가 실행되면 관찰자도 감시를 시작하며 알림을 받을 수 있는 상태가 되고
+
+액티비티가 정지되면 관찰자도 감시를 중단하며 알림을 받을 수 없는 상태가 된다.
+
+그런데 **lifeCycleOwner와 상관없이 항상 알림을 받을 수 있는 방법이 있는데 그게 바로 observerForever 메서드**이다.
+
+이 메서드를 사용하면 lifeCycleOwner가 없어도 관찰자를 생성하고 LiveData와 연결할 수 있으며
+
+UI 컨트롤러의 생명주기와 상관없이 항상 알림을 받을 수 있는 상태가 된다.
+
+ ```Kotlin
+        // 일반적인 Observer 생성
+        model.getAll().observe(this, Observer{ notice ->
+ 
+        })
+ 
+        // observerForever를 통한 생성 
+        model.getAll().observeForever(Observer{ notice ->
+ 
+        })
+```
+
+이렇게 observe대신 observerForever를 사용하면 되고 this를 넣어주지 않아도 된다.
+
+대신 관찰자를 삭제할 때는 removeObserver 메서드를 사용하여 직접 삭제해주어야 한다.
